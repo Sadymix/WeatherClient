@@ -1,12 +1,16 @@
-package client;
+package com.example.weather.client.client;
 
-import models.dto.WeatherDto;
+import com.example.weather.client.models.dto.WeatherDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+import javax.annotation.PostConstruct;
+
+@Slf4j
+@Component
 @RequiredArgsConstructor
 public class WeatherClient {
 
@@ -17,7 +21,12 @@ public class WeatherClient {
     private String keyValue;
 
     public WeatherDto getWeather(String city) {
-        return restTemplate.getForObject(url + "?q=" + city + "&appud="+keyValue,
+        return restTemplate.getForObject(url + "?q=" + city + "&appid="+keyValue,
                 WeatherDto.class);
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.info(getWeather("Warsaw").toString());
     }
 }
