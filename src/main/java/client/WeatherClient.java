@@ -1,6 +1,6 @@
 package client;
 
-import dto.WeatherDto;
+import models.dto.WeatherDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,5 @@ public class WeatherClient {
     public WeatherDto getWeather(String city) {
         return restTemplate.getForObject(url + "?q=" + city + "&appud="+keyValue,
                 WeatherDto.class);
-    }
-
-    public void deleteWeather(String city){
-        restTemplate.delete(url + "?q=" + city + "&appud="+keyValue);
     }
 }
