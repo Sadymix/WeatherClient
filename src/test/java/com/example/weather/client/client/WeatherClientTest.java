@@ -1,10 +1,10 @@
-package client;
+package com.example.weather.client.client;
 
-import models.dto.WeatherDto;
-import models.entity.Coord;
-import models.entity.Main;
-import models.entity.Weather;
-import models.entity.Wind;
+import com.example.weather.client.models.dto.WeatherDto;
+import com.example.weather.client.models.entity.Coord;
+import com.example.weather.client.models.entity.Main;
+import com.example.weather.client.models.entity.Weather;
+import com.example.weather.client.models.entity.Wind;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,8 +65,8 @@ class WeatherClientTest {
     }
 
     @Test
-    void getWeather() {
-        when(restTemplate.getForObject(eq(URL+"?q=Warsaw&appud=123"), eq(WeatherDto.class)))
+    void testGetWeather() {
+        when(restTemplate.getForObject(eq(URL+"?q=Warsaw&appid=123"), eq(WeatherDto.class)))
                 .thenReturn(WEATHER_DTO);
         var weatherDto = weatherClient.getWeather("Warsaw");
         assertThat(weatherDto).isNotNull();
