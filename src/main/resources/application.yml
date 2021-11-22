@@ -2,5 +2,8 @@ openweather:
   api:
     key: ee6bbf09dcc0ab10e314eda8dce3dc74
 app:
-  base:
-    url: http://api.openweathermap.org/data/2.5/weather
+  url:
+    base: http://api.openweathermap.org/data/2.5/weather
+    db: mongodb://localhost:27017/
+  name:
+    db: weatherClient

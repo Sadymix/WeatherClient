@@ -15,13 +15,13 @@ import javax.annotation.PostConstruct;
 public class WeatherClient {
 
     private final RestTemplate restTemplate;
-    @Value("${app.base.url}")
+    @Value("${app.url.base}")
     private String url;
     @Value("${openweather.api.key}")
     private String keyValue;
 
     public WeatherDataDto getWeather(String city) {
-        return restTemplate.getForObject(url + "?q=" + city + "&appid="+keyValue,
+        return restTemplate.getForObject(url + "?q=" + city + "&appid=" + keyValue,
                 WeatherDataDto.class);
     }
 
