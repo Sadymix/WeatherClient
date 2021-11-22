@@ -1,9 +1,10 @@
 package com.example.weather.client.models.dto;
 
-import com.example.weather.client.models.entity.Coord;
+import com.example.weather.client.models.entity.GeoCoordinates;
 import com.example.weather.client.models.entity.Main;
 import com.example.weather.client.models.entity.Weather;
 import com.example.weather.client.models.entity.Wind;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WeatherDto {
-    private Coord coord;
+    private GeoCoordinates coord;
     private List<Weather> weather;
     private Main main;
     private Wind wind;
-    private Long dt;
+    @JsonProperty("dt")
+    private Long unixTime;
     private String name;
 }

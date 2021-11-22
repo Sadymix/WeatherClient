@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Coord {
+public class GeoCoordinates {
     private Double lon;
     private Double lat;
 }
