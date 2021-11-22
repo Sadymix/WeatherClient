@@ -1,15 +1,18 @@
 package com.example.weather.client.models.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.UUID;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Accessors(chain = true)
+@Document
 public class Wind {
+    @Id
+    private UUID id;
     private Double speed;
-    private Long deg;
+    private Long degrees;
 }
