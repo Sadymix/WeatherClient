@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class WeatherDto {
-    private String main;
-    private String description;
+public class GeoCoordinatesDto {
+    private Double lon;
+    private Double lat;
 }

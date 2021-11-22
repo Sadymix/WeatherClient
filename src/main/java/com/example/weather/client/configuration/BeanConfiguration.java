@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class BeanConfiguration {
 
-
     @Bean
     public RestTemplate restTemplate(ObjectMapper objectMapper) {
 
@@ -29,7 +28,7 @@ public class BeanConfiguration {
     }
 
     @Autowired
-    public void setNamingStrategy(ObjectMapper objectMapper){
+    public void setNamingStrategy(ObjectMapper objectMapper) {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
 

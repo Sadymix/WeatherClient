@@ -1,6 +1,6 @@
 package com.example.weather.client.client;
 
-import com.example.weather.client.models.dto.WeatherDto;
+import com.example.weather.client.models.dto.WeatherDataDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +19,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class WeatherClientTest {
 
-    private static  final String URL = "http://api.openweathermap.org/data/2.5/weather";
+    private static final String URL = "http://api.openweathermap.org/data/2.5/weather";
     private static PodamFactory FACTORY = new PodamFactoryImpl();
-    private static final WeatherDto WEATHER_DTO = FACTORY.manufacturePojo(WeatherDto.class);
+    private static final WeatherDataDto WEATHER_DTO = FACTORY.manufacturePojo(WeatherDataDto.class);
 
     @Mock
     private RestTemplate restTemplate;
@@ -37,7 +37,7 @@ class WeatherClientTest {
 
     @Test
     void testGetWeather() {
-        when(restTemplate.getForObject(eq(URL+"?q=Warsaw&appid=123"), eq(WeatherDto.class)))
+        when(restTemplate.getForObject(eq(URL + "?q=Warsaw&appid=123"), eq(WeatherDataDto.class)))
                 .thenReturn(WEATHER_DTO);
         var weatherDto = weatherClient.getWeather("Warsaw");
         assertThat(weatherDto).isNotNull();

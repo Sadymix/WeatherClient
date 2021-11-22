@@ -10,9 +10,12 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 @Document
-public class GeoCoordinates {
+public class Conditions {
     @Id
     private UUID id;
-    private Double longitude;
-    private Double latitude;
+    private Double temperature;
+    private Double maxTemperature;
+    private Double minTemperature;
+    private Long pressure;
+    private Long humidity;
 }
