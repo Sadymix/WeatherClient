@@ -5,14 +5,12 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.UUID;
-
 @Data
 @Accessors(chain = true)
 @Document
 public class Wind {
     @Id
-    private UUID id;
+    private String id;
     private Double speed;
     private Long degrees;
 }
