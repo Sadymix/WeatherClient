@@ -1,5 +1,6 @@
-spring:
-  datasource:
-    url: jdbc:mongodb://localhost:27017/weatherClient
-    username: root
-    password: Test1234
+openweather:
+  api:
+    key: ee6bbf09dcc0ab10e314eda8dce3dc74
+app:
+  base:
+    url: http://api.openweathermap.org/data/2.5/weather
