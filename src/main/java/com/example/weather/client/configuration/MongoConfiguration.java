@@ -16,9 +16,9 @@ import java.util.Collections;
 @EnableMongoRepositories("com.example")
 public class MongoConfiguration extends AbstractMongoClientConfiguration {
 
-    @Value("${app.name.db}")
+    @Value("${app.mongo.name}")
     private String dbName;
-    @Value("${app.url.db}")
+    @Value("${app.mongo.url}")
     private String dbUrl;
 
     @Override

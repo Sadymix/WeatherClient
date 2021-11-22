@@ -4,6 +4,6 @@ openweather:
 app:
   url:
     base: http://api.openweathermap.org/data/2.5/weather
-    db: mongodb://localhost:27017/
-  name:
-    db: weatherClient
+  mongo:
+    name: weatherClient
+    url: mongodb://localhost:27017/
