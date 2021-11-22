@@ -8,6 +8,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,11 +17,14 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class BeanConfiguration {
 
+
     @Bean
-    public RestTemplate restTemplate() {
-        RestTemplateBuilder builder = new RestTemplateBuilder();
-        return builder.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+    public RestTemplate restTemplate(ObjectMapper objectMapper) {
+
+        return new RestTemplateBuilder()
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .messageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
                 .build();
     }
 
