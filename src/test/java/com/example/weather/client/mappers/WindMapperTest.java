@@ -15,7 +15,7 @@ class WindMapperTest {
     private WindMapper windMapper = new WindMapper();
 
     @Test
-    void toEntity() {
+    void testToEntity() {
         var wind = windMapper.toEntity(WIND_DTO);
         assertThat(wind).isNotNull();
         assertEquals(wind.getSpeed(), WIND_DTO.getSpeed());
