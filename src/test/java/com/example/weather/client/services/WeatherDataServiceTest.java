@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,16 +34,13 @@ class WeatherDataServiceTest {
     private WeatherDataService weatherDataService;
 
     @Test
-    void testScheduledSaveWeatherData() {
-
-    }
-
-    @Test
-    void testSaveWeatherDataForCity() {
+    void testSaveWeatherDataForWarsaw() {
         when(weatherClient.getWeather(anyString())).thenReturn(WEATHER_DATA_DTO);
         when(weatherDataMapper.toEntity(WEATHER_DATA_DTO)).thenReturn(WEATHER_DATA);
         when(weatherDataRepo.save(WEATHER_DATA)).thenReturn(WEATHER_DATA);
-        weatherDataService.saveWeatherDataForCity(WEATHER_DATA.getCityName());
+        weatherDataService.saveWeatherDataForWarsaw();
+        verify(weatherClient).getWeather(anyString());
+        verify(weatherDataMapper).toEntity(WEATHER_DATA_DTO);
         verify(weatherDataRepo).save(WEATHER_DATA);
     }
 }
