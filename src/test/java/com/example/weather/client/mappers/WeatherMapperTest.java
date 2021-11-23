@@ -7,32 +7,31 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.example.weather.client.utility.PodamUtility.makePojo;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class WeatherMapperTest {
 
-    private static final WeatherDto WEATHER_DTO = makePojo(WeatherDto.class);
-    private static final List<WeatherDto> WEATHER_DTO_LIST = List.of(WEATHER_DTO);
+    private WeatherDto weatherDto = makePojo(WeatherDto.class);
+    private List<WeatherDto> weatherDtoList = List.of(weatherDto);
     private final WeatherMapper weatherMapper = new WeatherMapper();
 
     @Test
     void testToEntity() {
-        var weather = weatherMapper.toEntity(WEATHER_DTO);
-        assertNotEquals(null, weather);
-        assertEquals(WEATHER_DTO.getMain(), weather.getParameters());
-        assertEquals(WEATHER_DTO.getDescription(), weather.getDescription());
+        var weather = weatherMapper.toEntity(weatherDto);
+        assertNotNull(weather);
+        assertEquals(weatherDto.getMain(), weather.getParameters());
+        assertEquals(weatherDto.getDescription(), weather.getDescription());
     }
 
     @Test
     void testToEntityList() {
-        var weatherList = weatherMapper.toEntityList(WEATHER_DTO_LIST);
+        var weatherList = weatherMapper.toEntityList(weatherDtoList);
         var weatherParametersList = weatherList.stream().map(Weather::getParameters).toList();
-        var weatherDtoParametersList = WEATHER_DTO_LIST.stream().map(WeatherDto::getMain).toList();
+        var weatherDtoParametersList = weatherDtoList.stream().map(WeatherDto::getMain).toList();
         var weatherDescriptionList = weatherList.stream().map(Weather::getDescription).toList();
-        var weatherDtoDescriptionList = WEATHER_DTO_LIST.stream().map(WeatherDto::getDescription).toList();
-        assertThat(weatherList).isNotNull();
+        var weatherDtoDescriptionList = weatherDtoList.stream().map(WeatherDto::getDescription).toList();
+        assertNotNull(weatherList);
         assertEquals(weatherParametersList, weatherDtoParametersList);
         assertEquals(weatherDescriptionList, weatherDtoDescriptionList);
     }
