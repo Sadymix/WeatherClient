@@ -10,9 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.co.jemos.podam.api.PodamFactory;
-import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+import static com.example.weather.client.utility.PodamUtility.makePojo;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,9 +19,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class WeatherDataServiceTest {
 
-    private static PodamFactory FACTORY = new PodamFactoryImpl();
-    private static final WeatherDataDto WEATHER_DATA_DTO = FACTORY.manufacturePojo(WeatherDataDto.class);
-    private static final WeatherData WEATHER_DATA = FACTORY.manufacturePojo(WeatherData.class);
+    private static final WeatherDataDto WEATHER_DATA_DTO = makePojo(WeatherDataDto.class);
+    private static final WeatherData WEATHER_DATA = makePojo(WeatherData.class);
 
     @Mock
     private WeatherDataRepo weatherDataRepo;

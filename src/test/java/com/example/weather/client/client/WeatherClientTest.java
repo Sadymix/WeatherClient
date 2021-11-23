@@ -9,9 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
-import uk.co.jemos.podam.api.PodamFactory;
-import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+import static com.example.weather.client.utility.PodamUtility.makePojo;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -20,8 +19,7 @@ import static org.mockito.Mockito.when;
 class WeatherClientTest {
 
     private static final String URL = "http://api.openweathermap.org/data/2.5/weather";
-    private static PodamFactory FACTORY = new PodamFactoryImpl();
-    private static final WeatherDataDto WEATHER_DTO = FACTORY.manufacturePojo(WeatherDataDto.class);
+    private static final WeatherDataDto WEATHER_DTO = makePojo(WeatherDataDto.class);
 
     @Mock
     private RestTemplate restTemplate;
