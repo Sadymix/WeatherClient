@@ -7,3 +7,7 @@ app:
   mongo:
     name: weatherClient
     url: mongodb://localhost:27017/
+#spring:
+#  data:
+#    mongodb:
+#      uuid-representation:
