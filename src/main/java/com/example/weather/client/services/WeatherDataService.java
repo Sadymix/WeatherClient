@@ -4,18 +4,14 @@ import com.example.weather.client.client.WeatherClient;
 import com.example.weather.client.mappers.WeatherDataMapper;
 import com.example.weather.client.repositories.WeatherDataRepo;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
-@Setter
 @Service
 @RequiredArgsConstructor
-@EnableAsync
 public class WeatherDataService {
 
     private final WeatherDataRepo weatherDataRepo;
