@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -23,10 +21,5 @@ public class WeatherClient {
     public WeatherDataDto getWeather(String city) {
         return restTemplate.getForObject(url + "?q=" + city + "&appid=" + keyValue,
                 WeatherDataDto.class);
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.info(getWeather("Warsaw").toString());
     }
 }

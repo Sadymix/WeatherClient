@@ -31,5 +31,4 @@ public class BeanConfiguration {
     public void setNamingStrategy(ObjectMapper objectMapper) {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
-
 }

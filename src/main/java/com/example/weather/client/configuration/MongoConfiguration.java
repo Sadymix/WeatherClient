@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Configuration
 @EnableMongoRepositories("com.example")
@@ -37,7 +37,7 @@ public class MongoConfiguration extends AbstractMongoClientConfiguration {
     }
 
     @Override
-    public Collection getMappingBasePackages() {
+    public Set<String> getMappingBasePackages() {
         return Collections.singleton("com.example");
     }
 }
