@@ -1,10 +1,12 @@
 package com.example.weather.client.configuration;
 
+import com.example.weather.client.events.WeatherDataCascadeSaveMongoEventListener;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -39,5 +41,10 @@ public class MongoConfiguration extends AbstractMongoClientConfiguration {
     @Override
     public Collection getMappingBasePackages() {
         return Collections.singleton("com.example");
+    }
+
+    @Bean
+    public WeatherDataCascadeSaveMongoEventListener weatherDataCascadeSaveMongoEventListener() {
+        return new WeatherDataCascadeSaveMongoEventListener();
     }
 }
