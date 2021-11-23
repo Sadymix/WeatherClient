@@ -5,28 +5,54 @@ import com.example.weather.client.mappers.WeatherDataMapper;
 import com.example.weather.client.repositories.WeatherDataRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 @Setter
 @Service
 @RequiredArgsConstructor
+@EnableAsync
 public class WeatherDataService {
 
     private final WeatherDataRepo weatherDataRepo;
     private final WeatherClient weatherClient;
     private final WeatherDataMapper weatherDataMapper;
 
-    @Scheduled(fixedRate = 1000)
-    public void scheduledSaveWeatherData() {
+    @Async
+    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    public void saveWeatherDataForWarsaw() {
         saveWeatherDataForCity("Warsaw");
+    }
+
+    @Async
+    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    public void saveWeatherDataForNewYork() {
         saveWeatherDataForCity("New York");
+    }
+
+    @Async
+    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    public void saveWeatherDataForLondon() {
         saveWeatherDataForCity("London");
+    }
+
+    @Async
+    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    public void saveWeatherDataForMadrid() {
         saveWeatherDataForCity("Madrid");
+    }
+
+    @Async
+    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    public void saveWeatherDataForBerlin() {
         saveWeatherDataForCity("Berlin");
     }
 
-    public void saveWeatherDataForCity(String city) {
+    private void saveWeatherDataForCity(String city) {
         weatherDataRepo.save(weatherDataMapper.toEntity(weatherClient.getWeather(city)));
     }
 }
