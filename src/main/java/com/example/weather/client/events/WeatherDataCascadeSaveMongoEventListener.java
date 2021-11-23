@@ -1,15 +1,17 @@
 package com.example.weather.client.events;
 
 import com.example.weather.client.models.entity.WeatherData;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class WeatherDataCascadeSaveMongoEventListener extends AbstractMongoEventListener<Object> {
 
-    @Autowired
-    private MongoOperations mongoOperations;
+    private final MongoOperations mongoOperations;
 
     @Override
     public void onBeforeConvert(final BeforeConvertEvent<Object> event) {
