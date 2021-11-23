@@ -13,7 +13,6 @@ class ConditionsMapperTest {
     private ConditionsDto conditionsDto = makePojo(ConditionsDto.class);
     private final ConditionsMapper conditionsMapper = new ConditionsMapper();
 
-
     @Test
     void testToEntity() {
         var conditions = conditionsMapper.toEntity(conditionsDto);

@@ -11,7 +11,6 @@ class GeoCoordinatesMapperTest {
     private GeoCoordinatesDto geoCoordinatesDto = makePojo(GeoCoordinatesDto.class);
     private final GeoCoordinatesMapper geoCoordinatesMapper = new GeoCoordinatesMapper();
 
-
     @Test
     void testToEntity() {
         var geoCoordinates = geoCoordinatesMapper.toEntity(geoCoordinatesDto);

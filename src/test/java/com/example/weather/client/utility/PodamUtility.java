@@ -1,14 +1,16 @@
 package com.example.weather.client.utility;
 
-import org.springframework.stereotype.Component;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-@Component
-public class PodamUtility {
+public final class PodamUtility {
+
+    private static PodamFactory FACTORY = new PodamFactoryImpl();
+
+    private PodamUtility() {
+    }
 
     public static <T> T makePojo(Class<T> tClass) {
-        PodamFactory factory = new PodamFactoryImpl();
-        return factory.manufacturePojo(tClass);
+        return FACTORY.manufacturePojo(tClass);
     }
 }
