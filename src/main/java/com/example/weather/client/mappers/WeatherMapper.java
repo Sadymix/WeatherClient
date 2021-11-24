@@ -21,4 +21,16 @@ public class WeatherMapper {
                 .map(this::toEntity)
                 .collect(Collectors.toList());
     }
+
+    public List<WeatherDto> toDtoList(List<Weather> weatherList) {
+        return weatherList.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private WeatherDto toDto(Weather weather) {
+        return new WeatherDto()
+                .setMain(weather.getParameters())
+                .setDescription(weather.getDescription());
+    }
 }
