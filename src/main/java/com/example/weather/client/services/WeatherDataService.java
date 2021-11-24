@@ -48,6 +48,12 @@ public class WeatherDataService {
         saveWeatherDataForCity("Berlin");
     }
 
+    public void deleteWeatherDataInTimePeriod(Long fromTime, Long toTime) {
+        var weatherDataInTimePeriod =
+                weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(fromTime, toTime);
+        weatherDataRepo.deleteAll(weatherDataInTimePeriod);
+    }
+
     private void saveWeatherDataForCity(String city) {
         weatherDataRepo.save(weatherDataMapper.toEntity(weatherClient.getWeather(city)));
     }
