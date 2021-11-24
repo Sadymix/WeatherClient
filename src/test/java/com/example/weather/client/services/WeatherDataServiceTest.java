@@ -11,16 +11,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static com.example.weather.client.utility.PodamUtility.makePojo;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class WeatherDataServiceTest {
 
-    private static final WeatherDataDto WEATHER_DATA_DTO = makePojo(WeatherDataDto.class);
-    private static final WeatherData WEATHER_DATA = makePojo(WeatherData.class);
+    private WeatherDataDto weatherDataDto = makePojo(WeatherDataDto.class);
+    private WeatherData weatherData = makePojo(WeatherData.class);
+    private List<WeatherData> weatherDataList = List.of(weatherData);
 
     @Mock
     private WeatherDataRepo weatherDataRepo;
@@ -33,12 +35,22 @@ class WeatherDataServiceTest {
 
     @Test
     void testSaveWeatherDataForWarsaw() {
-        when(weatherClient.getWeather(anyString())).thenReturn(WEATHER_DATA_DTO);
-        when(weatherDataMapper.toEntity(WEATHER_DATA_DTO)).thenReturn(WEATHER_DATA);
-        when(weatherDataRepo.save(WEATHER_DATA)).thenReturn(WEATHER_DATA);
+        when(weatherClient.getWeather(anyString())).thenReturn(weatherDataDto);
+        when(weatherDataMapper.toEntity(weatherDataDto)).thenReturn(weatherData);
+        when(weatherDataRepo.save(weatherData)).thenReturn(weatherData);
         weatherDataService.saveWeatherDataForWarsaw();
         verify(weatherClient).getWeather(anyString());
-        verify(weatherDataMapper).toEntity(WEATHER_DATA_DTO);
-        verify(weatherDataRepo).save(WEATHER_DATA);
+        verify(weatherDataMapper).toEntity(weatherDataDto);
+        verify(weatherDataRepo).save(weatherData);
+    }
+
+    @Test
+    void testDeleteWeatherDataInTimePeriod() {
+        when(weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(11L, 12L))
+                .thenReturn(weatherDataList);
+        doNothing().when(weatherDataRepo).deleteAll(weatherDataList);
+        weatherDataService.deleteWeatherDataInTimePeriod(11L, 12L);
+        verify(weatherDataRepo).findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(11L, 12L);
+        verify(weatherDataRepo).deleteAll(weatherDataList);
     }
 }
