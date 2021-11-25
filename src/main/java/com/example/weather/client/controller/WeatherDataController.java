@@ -18,7 +18,7 @@ public class WeatherDataController {
 
     @GetMapping
     public Page<WeatherDataDto> getWeatherDataByCity(
-            @RequestParam(defaultValue = "Warsaw") String city,
+            @RequestParam String city,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return weatherDataService.getWeatherDataByCity(city, page, size);
