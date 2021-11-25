@@ -51,18 +51,6 @@ class WeatherDataServiceTest {
     }
 
     @Test
-    void testDeleteWeatherDataInTimePeriod() {
-        var now = LocalDateTime.now();
-        var seconds = now.toEpochSecond(ZoneOffset.UTC);
-        when(weatherDataRepo.findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(seconds, seconds))
-                .thenReturn(WEATHER_DATA_LIST);
-        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
-        weatherDataService.deleteWeatherDataInTimePeriod(now, now);
-        verify(weatherDataRepo).findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(seconds, seconds);
-        verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
-    }
-
-    @Test
     void testGetWeatherDataByCity() {
         Pageable pageable = PageRequest.of(0, 5, Sort.by("unixTime").ascending());
         when(weatherDataRepo.findAllByCityName("Berlin", pageable))
@@ -83,5 +71,30 @@ class WeatherDataServiceTest {
         assertThrows(ResourceToLargeException.class,
                 () -> weatherDataService.getWeatherDataByCity("Berlin", 0, 150));
         verify(weatherDataRepo, times(0)).findAllByCityName("Berlin", pageable);
+    }
+
+    @Test
+    void testDeleteWeatherDataInTimePeriod() {
+        var now = LocalDateTime.now();
+        var seconds = now.toEpochSecond(ZoneOffset.UTC);
+        when(weatherDataRepo.findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(seconds, seconds))
+                .thenReturn(WEATHER_DATA_LIST);
+        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+        weatherDataService.deleteWeatherDataInTimePeriod(now, now);
+        verify(weatherDataRepo).findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(seconds, seconds);
+        verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+    }
+
+    @Test
+    void testDeleteWeatherDataInTimePeriodIfFromTimeNull() {
+        var now = LocalDateTime.now();
+        var fromTime = LocalDateTime.MIN.toEpochSecond(ZoneOffset.UTC);
+        var toTime = now.toEpochSecond(ZoneOffset.UTC);
+        when(weatherDataRepo.findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(fromTime, toTime))
+                .thenReturn(WEATHER_DATA_LIST);
+        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+        weatherDataService.deleteWeatherDataInTimePeriod(null, now);
+        verify(weatherDataRepo).findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(fromTime, toTime);
+        verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
     }
 }
