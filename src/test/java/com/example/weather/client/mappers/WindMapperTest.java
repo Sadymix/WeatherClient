@@ -10,12 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class WindMapperTest {
 
-    private WindDto expectedWindDto = makePojo(WindDto.class);
-    private Wind expectedWind = makePojo(Wind.class);
     private final WindMapper windMapper = new WindMapper();
 
     @Test
     void testToEntity() {
+        var expectedWindDto = makePojo(WindDto.class);
         var wind = windMapper.toEntity(expectedWindDto);
         assertNotNull(wind);
         assertEquals(expectedWindDto.getSpeed(), wind.getSpeed());
@@ -24,6 +23,7 @@ class WindMapperTest {
 
     @Test
     void testToDto() {
+        var expectedWind = makePojo(Wind.class);
         var windDto = windMapper.toDto(expectedWind);
         assertNotNull(windDto);
         assertEquals(expectedWind.getSpeed(), windDto.getSpeed());

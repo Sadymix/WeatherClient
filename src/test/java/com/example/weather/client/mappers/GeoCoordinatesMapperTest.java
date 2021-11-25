@@ -9,12 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GeoCoordinatesMapperTest {
 
-    private GeoCoordinatesDto expectedGeoCoordinatesDto = makePojo(GeoCoordinatesDto.class);
-    private GeoCoordinates expectedGeoCoordinates = makePojo(GeoCoordinates.class);
     private final GeoCoordinatesMapper geoCoordinatesMapper = new GeoCoordinatesMapper();
 
     @Test
     void testToEntity() {
+        var expectedGeoCoordinatesDto = makePojo(GeoCoordinatesDto.class);
         var geoCoordinates = geoCoordinatesMapper.toEntity(expectedGeoCoordinatesDto);
         assertNotNull(geoCoordinates);
         assertEquals(expectedGeoCoordinatesDto.getLon(), geoCoordinates.getLongitude());
@@ -23,6 +22,7 @@ class GeoCoordinatesMapperTest {
 
     @Test
     void testToDto() {
+        var expectedGeoCoordinates = makePojo(GeoCoordinates.class);
         var geoCoordinatesDto = geoCoordinatesMapper.toDto(expectedGeoCoordinates);
         assertNotNull(geoCoordinatesDto);
         assertEquals(expectedGeoCoordinates.getLongitude(), geoCoordinatesDto.getLon());

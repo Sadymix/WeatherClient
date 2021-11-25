@@ -11,12 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ConditionsMapperTest {
 
-    private ConditionsDto expectedConditionsDto = makePojo(ConditionsDto.class);
-    private Conditions expectedConditions = makePojo(Conditions.class);
     private final ConditionsMapper conditionsMapper = new ConditionsMapper();
 
     @Test
     void testToEntity() {
+        var expectedConditionsDto = makePojo(ConditionsDto.class);
         var conditions = conditionsMapper.toEntity(expectedConditionsDto);
         assertNotNull(conditions);
         assertEquals(expectedConditionsDto.getTemp(), conditions.getTemperature());
@@ -28,6 +27,7 @@ class ConditionsMapperTest {
 
     @Test
     void testToDto() {
+        var expectedConditions = makePojo(Conditions.class);
         var conditionsDto = conditionsMapper.toDto(expectedConditions);
         assertNotNull(conditionsDto);
         assertEquals(expectedConditions.getTemperature(), conditionsDto.getTemp());

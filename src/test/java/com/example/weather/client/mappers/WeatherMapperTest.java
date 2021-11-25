@@ -10,12 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class WeatherMapperTest {
 
-    private WeatherDto expectedWeatherDto = makePojo(WeatherDto.class);
-    private Weather expectedWeather = makePojo(Weather.class);
     private final WeatherMapper weatherMapper = new WeatherMapper();
 
     @Test
     void testToEntity() {
+        var expectedWeatherDto = makePojo(WeatherDto.class);
         var weather = weatherMapper.toEntity(expectedWeatherDto);
         assertNotNull(weather);
         assertEquals(expectedWeatherDto.getMain(), weather.getParameters());
@@ -24,6 +23,7 @@ class WeatherMapperTest {
 
     @Test
     void testToDto() {
+        var expectedWeather = makePojo(Weather.class);
         var weatherDto = weatherMapper.toDto(expectedWeather);
         assertNotNull(weatherDto);
         assertEquals(expectedWeather.getParameters(), weatherDto.getMain());

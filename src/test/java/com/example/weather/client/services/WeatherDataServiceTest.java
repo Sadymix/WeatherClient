@@ -25,7 +25,6 @@ class WeatherDataServiceTest {
 
     private static final WeatherDataDto WEATHER_DATA_DTO = makePojo(WeatherDataDto.class);
     private static final WeatherData WEATHER_DATA = makePojo(WeatherData.class);
-    private static final Page<WeatherData> PAGE_WEATHER_DATA = new PageImpl<>(List.of(WEATHER_DATA));
     @Mock
     private WeatherDataRepo weatherDataRepo;
     @Mock
@@ -48,10 +47,12 @@ class WeatherDataServiceTest {
 
     @Test
     void testGetWeatherDataByCity() {
+        Page<WeatherData> pageWeatherData = new PageImpl<>(List.of(WEATHER_DATA));
         Pageable pageable = PageRequest.of(0,5, Sort.by("unixTime").ascending());
         when(weatherDataRepo.findAllByCityName("Berlin", pageable))
-                .thenReturn(PAGE_WEATHER_DATA);
+                .thenReturn(pageWeatherData);
         when(weatherDataMapper.toDto(WEATHER_DATA)).thenReturn(WEATHER_DATA_DTO);
+
         var berlinWeatherDataDto =
                 weatherDataService.getWeatherDataByCity("Berlin", 0, 5);
         verify(weatherDataRepo).findAllByCityName("Berlin", pageable);
