@@ -71,6 +71,9 @@ public class WeatherDataService {
     }
 
     public void deleteWeatherDataInTimePeriod(LocalDateTime fromTime, LocalDateTime toTime) {
+        if(fromTime == null) {
+            fromTime = LocalDateTime.MIN;
+        }
         var weatherDataInTimePeriod =
                 weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(
                         fromTime.toEpochSecond(ZoneOffset.UTC),
