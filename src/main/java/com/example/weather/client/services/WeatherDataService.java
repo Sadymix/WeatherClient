@@ -21,6 +21,7 @@ public class WeatherDataService {
     private final WeatherDataRepo weatherDataRepo;
     private final WeatherClient weatherClient;
     private final WeatherDataMapper weatherDataMapper;
+    private final int maxPageSize = 100;
 
     @Async
     @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
@@ -54,7 +55,7 @@ public class WeatherDataService {
 
     public Page<WeatherDataDto> getWeatherDataByCity(String city, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("unixTime").ascending());
-        if (size > 100){
+        if (size > maxPageSize){
             throw new ResourceToLargeException("Size of page out of bound");
         }
         var weatherData = weatherDataRepo.findAllByCityName(city, pageable);
