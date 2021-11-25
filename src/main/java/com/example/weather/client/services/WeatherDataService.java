@@ -55,13 +55,6 @@ public class WeatherDataService {
         saveWeatherDataForCity("Berlin");
     }
 
-
-    public void deleteWeatherDataInTimePeriod(Long fromTime, Long toTime) {
-        var weatherDataInTimePeriod =
-                weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(fromTime, toTime);
-        weatherDataRepo.deleteAll(weatherDataInTimePeriod);
-    }
-
     public Page<WeatherDataDto> getWeatherDataByCity(String city, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("unixTime").ascending());
         if (size > MAX_PAGE_SIZE) {
