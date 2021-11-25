@@ -54,11 +54,11 @@ class WeatherDataServiceTest {
     void testDeleteWeatherDataInTimePeriod() {
         var now = LocalDateTime.now();
         var seconds = now.toEpochSecond(ZoneOffset.UTC);
-        when(weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(seconds, seconds))
+        when(weatherDataRepo.findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(seconds, seconds))
                 .thenReturn(WEATHER_DATA_LIST);
         doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
         weatherDataService.deleteWeatherDataInTimePeriod(now, now);
-        verify(weatherDataRepo).findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(seconds, seconds);
+        verify(weatherDataRepo).findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(seconds, seconds);
         verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
     }
 
