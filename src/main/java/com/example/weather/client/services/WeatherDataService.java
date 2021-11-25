@@ -77,6 +77,7 @@ public class WeatherDataService {
                         toTime.toEpochSecond(ZoneOffset.UTC));
         weatherDataRepo.deleteAll(weatherDataInTimePeriod);
     }
+
     private void saveWeatherDataForCity(String city) {
         weatherDataRepo.save(weatherDataMapper.toEntity(weatherClient.getWeather(city)));
     }

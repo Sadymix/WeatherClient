@@ -25,7 +25,7 @@ public class WeatherDataController {
 
     @DeleteMapping
     public void deleteWeatherDataInTimePeriod(
-            @RequestParam LocalDateTime fromTime,
+            @RequestParam(required = false) LocalDateTime fromTime,
             @RequestParam LocalDateTime toTime) {
         weatherDataService.deleteWeatherDataInTimePeriod(fromTime, toTime);
     }
