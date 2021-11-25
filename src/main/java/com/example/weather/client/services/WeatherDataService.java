@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -68,9 +70,11 @@ public class WeatherDataService {
                 weatherDataList.size());
     }
 
-    public void deleteWeatherDataInTimePeriod(Long fromTime, Long toTime) {
+    public void deleteWeatherDataInTimePeriod(LocalDateTime fromTime, LocalDateTime toTime) {
         var weatherDataInTimePeriod =
-                weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(fromTime, toTime);
+                weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(
+                        fromTime.toEpochSecond(ZoneOffset.UTC),
+                        toTime.toEpochSecond(ZoneOffset.UTC));
         weatherDataRepo.deleteAll(weatherDataInTimePeriod);
     }
 
