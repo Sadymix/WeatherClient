@@ -1,18 +1,16 @@
 package com.example.weather.client.services;
 
 import com.example.weather.client.client.WeatherClient;
+import com.example.weather.client.exceptions.MyResourceNotFoundException;
 import com.example.weather.client.mappers.WeatherDataMapper;
 import com.example.weather.client.models.dto.WeatherDataDto;
 import com.example.weather.client.repositories.WeatherDataRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -54,12 +52,17 @@ public class WeatherDataService {
         saveWeatherDataForCity("Berlin");
     }
 
-    public List<WeatherDataDto> getWeatherDataByCity(String city, int page, int size) {
+    public Page<WeatherDataDto> getWeatherDataByCity(String city, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("unixTime").ascending());
         var weatherData = weatherDataRepo.findAllByCityName(city, pageable);
-        return weatherData.getContent().stream()
+        if (page > weatherData.getTotalPages()) throw new MyResourceNotFoundException("Index for page out of bound");
+        var weatherDataList = weatherData.stream()
                 .map(weatherDataMapper::toDto)
                 .collect(Collectors.toList());
+        return new PageImpl<>(
+                weatherDataList,
+                pageable,
+                weatherDataList.size());
     }
 
     private void saveWeatherDataForCity(String city) {
