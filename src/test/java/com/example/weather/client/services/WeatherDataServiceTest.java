@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
-import java.util.List;
-
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static com.example.weather.client.utility.PodamUtility.makePojo;
@@ -53,11 +53,13 @@ class WeatherDataServiceTest {
 
     @Test
     void testDeleteWeatherDataInTimePeriod() {
-        when(weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(11L, 12L))
+        var now = LocalDateTime.now();
+        var seconds = now.toEpochSecond(ZoneOffset.UTC);
+        when(weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(seconds, seconds))
                 .thenReturn(WEATHER_DATA_LIST);
         doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
-        weatherDataService.deleteWeatherDataInTimePeriod(11L, 12L);
-        verify(weatherDataRepo).findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(11L, 12L);
+        weatherDataService.deleteWeatherDataInTimePeriod(now, now);
+        verify(weatherDataRepo).findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(seconds, seconds);
         verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
     }
 
