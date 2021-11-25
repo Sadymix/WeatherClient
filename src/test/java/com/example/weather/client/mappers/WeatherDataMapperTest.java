@@ -1,45 +1,89 @@
 package com.example.weather.client.mappers;
 
-import com.example.weather.client.models.dto.WeatherDataDto;
-import com.example.weather.client.models.dto.WeatherDto;
-import com.example.weather.client.models.entity.Weather;
-import com.example.weather.client.models.entity.WeatherData;
+import com.example.weather.client.models.dto.*;
+import com.example.weather.client.models.entity.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.example.weather.client.utility.PodamUtility.makePojo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class WeatherDataMapperTest {
 
-    private WeatherDataDto weatherDataDto = makePojo(WeatherDataDto.class);
-    private final WeatherDataMapper weatherDataMapper = new WeatherDataMapper(
-            new GeoCoordinatesMapper(),
-            new WeatherMapper(),
-            new ConditionsMapper(),
-            new WindMapper());
+    private WeatherDataDto expectedWeatherDataDto = makePojo(WeatherDataDto.class);
+    private WeatherData expectedWeatherData = makePojo(WeatherData.class);
+    private GeoCoordinates geoCoordinates = makePojo(GeoCoordinates.class);
+    private Weather weather = makePojo(Weather.class);
+    private Conditions conditions = makePojo(Conditions.class);
+    private Wind wind = makePojo(Wind.class);
+    private GeoCoordinatesDto geoCoordinatesDto = makePojo(GeoCoordinatesDto.class);
+    private WeatherDto weatherDto = makePojo(WeatherDto.class);
+    private ConditionsDto conditionsDto = makePojo(ConditionsDto.class);
+    private WindDto windDto = makePojo(WindDto.class);
+
+    @Mock
+    private GeoCoordinatesMapper geoCoordinatesMapper;
+    @Mock
+    private WeatherMapper weatherMapper;
+    @Mock
+    private ConditionsMapper conditionsMapper;
+    @Mock
+    private WindMapper windMapper;
+    @InjectMocks
+    private WeatherDataMapper weatherDataMapper;
 
     @Test
     void testToEntity() {
-        var weatherData = weatherDataMapper.toEntity(weatherDataDto);
+        when(geoCoordinatesMapper.toEntity(any(GeoCoordinatesDto.class)))
+                .thenReturn(geoCoordinates);
+        when(weatherMapper.toEntity(any(WeatherDto.class)))
+                .thenReturn(weather);
+        when(conditionsMapper.toEntity(any(ConditionsDto.class)))
+                .thenReturn(conditions);
+        when(windMapper.toEntity(any(WindDto.class)))
+                .thenReturn(wind);
+        var weatherData = weatherDataMapper.toEntity(expectedWeatherDataDto);
         assertNotNull(weatherData);
-        assertEqualsForWeatherData(weatherData);
+        assertEqualsForToEntity(weatherData);
     }
 
-    private void assertEqualsForWeatherData(WeatherData weatherData) {
-        assertEquals(weatherDataDto.getCoord().getLon(), weatherData.getCoordinates().getLongitude());
-        assertEquals(weatherDataDto.getCoord().getLat(), weatherData.getCoordinates().getLatitude());
-        assertEquals(weatherDataDto.getWeather().stream().map(WeatherDto::getMain).toList(),
-                weatherData.getWeathers().stream().map(Weather::getParameters).toList());
-        assertEquals(weatherDataDto.getWeather().stream().map(WeatherDto::getDescription).toList(),
-                weatherData.getWeathers().stream().map(Weather::getDescription).toList());
-        assertEquals(weatherDataDto.getMain().getTemp(), weatherData.getConditions().getTemperature());
-        assertEquals(weatherDataDto.getMain().getTempMax(), weatherData.getConditions().getMaxTemperature());
-        assertEquals(weatherDataDto.getMain().getTempMin(), weatherData.getConditions().getMinTemperature());
-        assertEquals(weatherDataDto.getMain().getPressure(), weatherData.getConditions().getPressure());
-        assertEquals(weatherDataDto.getMain().getHumidity(), weatherData.getConditions().getHumidity());
-        assertEquals(weatherDataDto.getWind().getSpeed(), weatherData.getWind().getSpeed());
-        assertEquals(weatherDataDto.getWind().getDeg(), weatherData.getWind().getDegrees());
-        assertEquals(weatherDataDto.getUnixTime(), weatherData.getUnixTime());
-        assertEquals(weatherDataDto.getName(), weatherData.getCityName());
+    @Test
+    void testToDto() {
+        when(geoCoordinatesMapper.toDto(any(GeoCoordinates.class)))
+                .thenReturn(geoCoordinatesDto);
+        when(weatherMapper.toDto(any(Weather.class)))
+                .thenReturn(weatherDto);
+        when(conditionsMapper.toDto(any(Conditions.class)))
+                .thenReturn(conditionsDto);
+        when(windMapper.toDto(any(Wind.class)))
+                .thenReturn(windDto);
+        var weatherDataDto = weatherDataMapper.toDto(expectedWeatherData);
+        assertNotNull(weatherDataDto);
+        assertEqualsForToDto(weatherDataDto);
+    }
+
+    private void assertEqualsForToEntity(WeatherData weatherData) {
+        assertEquals(geoCoordinates, weatherData.getCoordinates());
+        assertEquals(weather, weatherData.getWeathers().get(0));
+        assertEquals(conditions, weatherData.getConditions());
+        assertEquals(wind, weatherData.getWind());
+        assertEquals(expectedWeatherDataDto.getUnixTime(), weatherData.getUnixTime());
+        assertEquals(expectedWeatherDataDto.getName(), weatherData.getCityName());
+    }
+
+    private void assertEqualsForToDto(WeatherDataDto weatherDataDto) {
+        assertEquals(geoCoordinatesDto, weatherDataDto.getCoord());
+        assertEquals(weatherDto, weatherDataDto.getWeather().get(0));
+        assertEquals(conditionsDto, weatherDataDto.getMain());
+        assertEquals(windDto, weatherDataDto.getWind());
+        assertEquals(expectedWeatherData.getUnixTime(), weatherDataDto.getUnixTime());
+        assertEquals(expectedWeatherData.getCityName(), weatherDataDto.getName());
     }
 }

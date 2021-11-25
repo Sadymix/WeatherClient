@@ -12,4 +12,10 @@ public class WindMapper {
                 .setSpeed(windDto.getSpeed())
                 .setDegrees(windDto.getDeg());
     }
+
+    public WindDto toDto(Wind wind) {
+        return new WindDto()
+                .setSpeed(wind.getSpeed())
+                .setDeg(wind.getDegrees());
+    }
 }

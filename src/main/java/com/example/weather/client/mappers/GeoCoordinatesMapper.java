@@ -12,4 +12,10 @@ public class GeoCoordinatesMapper {
                 .setLongitude(geoCoordinatesDto.getLon())
                 .setLatitude(geoCoordinatesDto.getLat());
     }
+
+    public GeoCoordinatesDto toDto(GeoCoordinates geoCoordinates) {
+        return new GeoCoordinatesDto()
+                .setLon(geoCoordinates.getLongitude())
+                .setLat(geoCoordinates.getLatitude());
+    }
 }
