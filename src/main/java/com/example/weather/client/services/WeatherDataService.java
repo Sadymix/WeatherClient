@@ -1,7 +1,7 @@
 package com.example.weather.client.services;
 
 import com.example.weather.client.client.WeatherClient;
-import com.example.weather.client.exceptions.MyResourceNotFoundException;
+import com.example.weather.client.exceptions.ResourceToLargeException;
 import com.example.weather.client.mappers.WeatherDataMapper;
 import com.example.weather.client.models.dto.WeatherDataDto;
 import com.example.weather.client.repositories.WeatherDataRepo;
@@ -54,8 +54,10 @@ public class WeatherDataService {
 
     public Page<WeatherDataDto> getWeatherDataByCity(String city, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("unixTime").ascending());
+        if (size > 100){
+            throw new ResourceToLargeException("Size of page out of bound");
+        }
         var weatherData = weatherDataRepo.findAllByCityName(city, pageable);
-        if (page > weatherData.getTotalPages()) throw new MyResourceNotFoundException("Index for page out of bound");
         var weatherDataList = weatherData.stream()
                 .map(weatherDataMapper::toDto)
                 .collect(Collectors.toList());
