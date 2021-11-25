@@ -4,6 +4,7 @@ import com.example.weather.client.models.dto.WeatherDataDto;
 import com.example.weather.client.services.WeatherDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,8 +26,8 @@ public class WeatherDataController {
 
     @DeleteMapping
     public void deleteWeatherDataInTimePeriod(
-            @RequestParam(required = false) LocalDateTime fromTime,
-            @RequestParam LocalDateTime toTime) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toTime) {
         weatherDataService.deleteWeatherDataInTimePeriod(fromTime, toTime);
     }
 }
