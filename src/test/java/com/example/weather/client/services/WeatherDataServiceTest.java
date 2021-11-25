@@ -1,6 +1,7 @@
 package com.example.weather.client.services;
 
 import com.example.weather.client.client.WeatherClient;
+import com.example.weather.client.exceptions.ResourceToLargeException;
 import com.example.weather.client.mappers.WeatherDataMapper;
 import com.example.weather.client.models.dto.WeatherDataDto;
 import com.example.weather.client.models.entity.WeatherData;
@@ -10,20 +11,25 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
+
+import java.util.List;
 
 import java.util.List;
 
 import static com.example.weather.client.utility.PodamUtility.makePojo;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class WeatherDataServiceTest {
 
-    private WeatherDataDto weatherDataDto = makePojo(WeatherDataDto.class);
-    private WeatherData weatherData = makePojo(WeatherData.class);
-    private List<WeatherData> weatherDataList = List.of(weatherData);
-
+    private static final WeatherDataDto WEATHER_DATA_DTO = makePojo(WeatherDataDto.class);
+    private static final WeatherData WEATHER_DATA = makePojo(WeatherData.class);
+    private static final Page<WeatherData> PAGE_WEATHER_DATA = new PageImpl<>(List.of(WEATHER_DATA));
+    private static final List<WeatherData> WEATHER_DATA_LIST = List.of(weatherData);
     @Mock
     private WeatherDataRepo weatherDataRepo;
     @Mock
@@ -35,22 +41,45 @@ class WeatherDataServiceTest {
 
     @Test
     void testSaveWeatherDataForWarsaw() {
-        when(weatherClient.getWeather(anyString())).thenReturn(weatherDataDto);
-        when(weatherDataMapper.toEntity(weatherDataDto)).thenReturn(weatherData);
-        when(weatherDataRepo.save(weatherData)).thenReturn(weatherData);
+        when(weatherClient.getWeather(anyString())).thenReturn(WEATHER_DATA_DTO);
+        when(weatherDataMapper.toEntity(WEATHER_DATA_DTO)).thenReturn(WEATHER_DATA);
+        when(weatherDataRepo.save(WEATHER_DATA)).thenReturn(WEATHER_DATA);
         weatherDataService.saveWeatherDataForWarsaw();
         verify(weatherClient).getWeather(anyString());
-        verify(weatherDataMapper).toEntity(weatherDataDto);
-        verify(weatherDataRepo).save(weatherData);
+        verify(weatherDataMapper).toEntity(WEATHER_DATA_DTO);
+        verify(weatherDataRepo).save(WEATHER_DATA);
     }
 
     @Test
     void testDeleteWeatherDataInTimePeriod() {
         when(weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(11L, 12L))
-                .thenReturn(weatherDataList);
-        doNothing().when(weatherDataRepo).deleteAll(weatherDataList);
+                .thenReturn(WEATHER_DATA_LIST);
+        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
         weatherDataService.deleteWeatherDataInTimePeriod(11L, 12L);
         verify(weatherDataRepo).findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(11L, 12L);
-        verify(weatherDataRepo).deleteAll(weatherDataList);
+        verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+    }
+
+    @Test
+    void testGetWeatherDataByCity() {
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("unixTime").ascending());
+        when(weatherDataRepo.findAllByCityName("Berlin", pageable))
+                .thenReturn(PAGE_WEATHER_DATA);
+        when(weatherDataMapper.toDto(WEATHER_DATA)).thenReturn(WEATHER_DATA_DTO);
+
+        var berlinWeatherDataDto =
+                weatherDataService.getWeatherDataByCity("Berlin", 0, 5);
+        verify(weatherDataRepo).findAllByCityName("Berlin", pageable);
+        verify(weatherDataMapper).toDto(WEATHER_DATA);
+        assertThat(berlinWeatherDataDto).isNotNull();
+        assertThat(berlinWeatherDataDto.getContent()).isEqualTo(List.of(WEATHER_DATA_DTO));
+    }
+
+    @Test
+    void testGetWeatherDataByCityWithToLargeSize() {
+        Pageable pageable = PageRequest.of(0, 150, Sort.by("unixTime").ascending());
+        assertThrows(ResourceToLargeException.class,
+                () -> weatherDataService.getWeatherDataByCity("Berlin", 0, 150));
+        verify(weatherDataRepo, times(0)).findAllByCityName("Berlin", pageable);
     }
 }
