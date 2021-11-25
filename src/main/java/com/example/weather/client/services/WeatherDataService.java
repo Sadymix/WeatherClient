@@ -55,9 +55,16 @@ public class WeatherDataService {
         saveWeatherDataForCity("Berlin");
     }
 
+
+    public void deleteWeatherDataInTimePeriod(Long fromTime, Long toTime) {
+        var weatherDataInTimePeriod =
+                weatherDataRepo.findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(fromTime, toTime);
+        weatherDataRepo.deleteAll(weatherDataInTimePeriod);
+    }
+
     public Page<WeatherDataDto> getWeatherDataByCity(String city, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("unixTime").ascending());
-        if (size > MAX_PAGE_SIZE){
+        if (size > MAX_PAGE_SIZE) {
             throw new ResourceToLargeException("Size of page out of bound");
         }
         var weatherData = weatherDataRepo.findAllByCityName(city, pageable);
@@ -76,8 +83,11 @@ public class WeatherDataService {
                         fromTime.toEpochSecond(ZoneOffset.UTC),
                         toTime.toEpochSecond(ZoneOffset.UTC));
         weatherDataRepo.deleteAll(weatherDataInTimePeriod);
-    }
 
+        private void saveWeatherDataForCity (String city){
+            weatherDataRepo.save(weatherDataMapper.toEntity(weatherClient.getWeather(city)));
+        }
+    }
     private void saveWeatherDataForCity(String city) {
         weatherDataRepo.save(weatherDataMapper.toEntity(weatherClient.getWeather(city)));
     }

@@ -30,7 +30,6 @@ class WeatherDataServiceTest {
     private static final WeatherData WEATHER_DATA = makePojo(WeatherData.class);
     private static final Page<WeatherData> PAGE_WEATHER_DATA = new PageImpl<>(List.of(WEATHER_DATA));
     private List<WeatherData> WEATHER_DATA_LIST = List.of(WEATHER_DATA);
-
     @Mock
     private WeatherDataRepo weatherDataRepo;
     @Mock
