@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface WeatherDataRepo extends MongoRepository<WeatherData, String> {
     Page<WeatherData> findAllByCityName(String city, Pageable pageable);
-    List<WeatherData> findAllByUnixTimeGreaterThanAndUnixTimeLessThanEqual(Long fromTime, Long toTime);
+    List<WeatherData> findAllByUnixTimeGreaterThanEqualAndUnixTimeLessThanEqual(Long fromTime, Long toTime);
 }
