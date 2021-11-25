@@ -15,4 +15,13 @@ public class ConditionsMapper {
                 .setPressure(conditionsDto.getPressure())
                 .setHumidity(conditionsDto.getHumidity());
     }
+
+    public ConditionsDto toDto(Conditions conditions) {
+        return new ConditionsDto()
+                .setTemp(conditions.getTemperature())
+                .setTempMax(conditions.getMaxTemperature())
+                .setTempMin(conditions.getMinTemperature())
+                .setPressure(conditions.getPressure())
+                .setHumidity(conditions.getHumidity());
+    }
 }

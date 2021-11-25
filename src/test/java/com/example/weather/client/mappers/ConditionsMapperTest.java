@@ -1,6 +1,7 @@
 package com.example.weather.client.mappers;
 
 import com.example.weather.client.models.dto.ConditionsDto;
+import com.example.weather.client.models.entity.Conditions;
 import org.junit.jupiter.api.Test;
 
 
@@ -10,17 +11,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ConditionsMapperTest {
 
-    private ConditionsDto conditionsDto = makePojo(ConditionsDto.class);
     private final ConditionsMapper conditionsMapper = new ConditionsMapper();
 
     @Test
     void testToEntity() {
-        var conditions = conditionsMapper.toEntity(conditionsDto);
+        var expectedConditionsDto = makePojo(ConditionsDto.class);
+        var conditions = conditionsMapper.toEntity(expectedConditionsDto);
         assertNotNull(conditions);
-        assertEquals(conditionsDto.getTemp(), conditions.getTemperature());
-        assertEquals(conditionsDto.getTempMax(), conditions.getMaxTemperature());
-        assertEquals(conditionsDto.getTempMin(), conditions.getMinTemperature());
-        assertEquals(conditionsDto.getPressure(), conditions.getPressure());
-        assertEquals(conditionsDto.getHumidity(), conditions.getHumidity());
+        assertEquals(expectedConditionsDto.getTemp(), conditions.getTemperature());
+        assertEquals(expectedConditionsDto.getTempMax(), conditions.getMaxTemperature());
+        assertEquals(expectedConditionsDto.getTempMin(), conditions.getMinTemperature());
+        assertEquals(expectedConditionsDto.getPressure(), conditions.getPressure());
+        assertEquals(expectedConditionsDto.getHumidity(), conditions.getHumidity());
+    }
+
+    @Test
+    void testToDto() {
+        var expectedConditions = makePojo(Conditions.class);
+        var conditionsDto = conditionsMapper.toDto(expectedConditions);
+        assertNotNull(conditionsDto);
+        assertEquals(expectedConditions.getTemperature(), conditionsDto.getTemp());
+        assertEquals(expectedConditions.getMaxTemperature(), conditionsDto.getTempMax());
+        assertEquals(expectedConditions.getMinTemperature(), conditionsDto.getTempMin());
+        assertEquals(expectedConditions.getPressure(), conditionsDto.getPressure());
+        assertEquals(expectedConditions.getHumidity(), conditionsDto.getHumidity());
     }
 }

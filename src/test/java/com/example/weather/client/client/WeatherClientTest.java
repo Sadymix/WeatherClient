@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 class WeatherClientTest {
 
     private static final String URL = "http://api.openweathermap.org/data/2.5/weather";
-    private static final WeatherDataDto WEATHER_DTO = makePojo(WeatherDataDto.class);
 
     @Mock
     private RestTemplate restTemplate;
@@ -35,10 +34,11 @@ class WeatherClientTest {
 
     @Test
     void testGetWeather() {
+        var weatherDataDto = makePojo(WeatherDataDto.class);
         when(restTemplate.getForObject(eq(URL + "?q=Warsaw&appid=123"), eq(WeatherDataDto.class)))
-                .thenReturn(WEATHER_DTO);
+                .thenReturn(weatherDataDto);
         var weatherDto = weatherClient.getWeather("Warsaw");
         assertThat(weatherDto).isNotNull();
-        assertThat(weatherDto).isEqualTo(WEATHER_DTO);
+        assertThat(weatherDto).isEqualTo(weatherDataDto);
     }
 }
