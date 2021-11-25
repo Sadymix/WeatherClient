@@ -58,6 +58,6 @@ class WeatherDataServiceTest {
         verify(weatherDataRepo).findAllByCityName("Berlin", pageable);
         verify(weatherDataMapper).toDto(WEATHER_DATA);
         assertThat(berlinWeatherDataDto).isNotNull();
-        assertThat(berlinWeatherDataDto).isEqualTo(List.of(WEATHER_DATA_DTO));
+        assertThat(berlinWeatherDataDto.getContent()).isEqualTo(List.of(WEATHER_DATA_DTO));
     }
 }
