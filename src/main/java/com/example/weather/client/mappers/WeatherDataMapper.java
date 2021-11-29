@@ -6,7 +6,6 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -28,5 +27,5 @@ public interface WeatherDataMapper {
     @InheritInverseConfiguration(name = "toEntity")
     WeatherDataDto toDto(WeatherData weatherData);
 
-    List<WeatherDataDto> mapToDtoList(Page<WeatherData> weatherDataPage);
+    List<WeatherDataDto> mapToDtoList(List<WeatherData> weatherDataPage);
 }

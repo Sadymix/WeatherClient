@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,9 @@ public class WeatherDataService {
             throw new ResourceToLargeException("Size of page out of bound");
         }
         var weatherData = weatherDataRepo.findAllByCityName(city, pageable);
-        var weatherDataList = weatherDataMapper.mapToDtoList(weatherData);
+        var weatherDataList = weatherData.stream()
+                .map(weatherDataMapper::toDto)
+                .collect(Collectors.toList());
         return new PageImpl<>(
                 weatherDataList,
                 pageable,
