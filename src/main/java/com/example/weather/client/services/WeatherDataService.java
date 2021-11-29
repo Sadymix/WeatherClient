@@ -75,7 +75,7 @@ public class WeatherDataService {
             fromTime = LocalDateTime.MIN;
         }
         var weatherDataInTimePeriod =
-                weatherDataRepo.findAllInTimeRange(
+                weatherDataRepo.findAllByUnixTimeBetween(
                         fromTime.toEpochSecond(ZoneOffset.UTC),
                         toTime.toEpochSecond(ZoneOffset.UTC));
         weatherDataRepo.deleteAll(weatherDataInTimePeriod);

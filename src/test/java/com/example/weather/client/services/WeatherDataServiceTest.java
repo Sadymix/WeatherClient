@@ -77,11 +77,11 @@ class WeatherDataServiceTest {
     void testDeleteWeatherDataInTimePeriod() {
         var now = LocalDateTime.now();
         var seconds = now.toEpochSecond(ZoneOffset.UTC);
-        when(weatherDataRepo.findAllInTimeRange(seconds, seconds))
+        when(weatherDataRepo.findAllByUnixTimeBetween(seconds, seconds))
                 .thenReturn(WEATHER_DATA_LIST);
         doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
         weatherDataService.deleteWeatherDataInTimePeriod(now, now);
-        verify(weatherDataRepo).findAllInTimeRange(seconds, seconds);
+        verify(weatherDataRepo).findAllByUnixTimeBetween(seconds, seconds);
         verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
     }
 
@@ -90,11 +90,11 @@ class WeatherDataServiceTest {
         var now = LocalDateTime.now();
         var fromTime = LocalDateTime.MIN.toEpochSecond(ZoneOffset.UTC);
         var toTime = now.toEpochSecond(ZoneOffset.UTC);
-        when(weatherDataRepo.findAllInTimeRange(fromTime, toTime))
+        when(weatherDataRepo.findAllByUnixTimeBetween(fromTime, toTime))
                 .thenReturn(WEATHER_DATA_LIST);
         doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
         weatherDataService.deleteWeatherDataInTimePeriod(null, now);
-        verify(weatherDataRepo).findAllInTimeRange(fromTime, toTime);
+        verify(weatherDataRepo).findAllByUnixTimeBetween(fromTime, toTime);
         verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
     }
 }
