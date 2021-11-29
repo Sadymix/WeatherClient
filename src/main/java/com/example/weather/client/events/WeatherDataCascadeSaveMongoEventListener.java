@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
+import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +26,17 @@ public class WeatherDataCascadeSaveMongoEventListener extends AbstractMongoEvent
                 mongoOperations.save(source.getConditions());
                 mongoOperations.save(source.getWind());
             }
+        }
+    }
+
+    @Override
+    public void onBeforeDelete(BeforeDeleteEvent<Object> event) {
+        var id = mongoOperations.findById(event.getSource().getObjectId("_id"), event.getType());
+        if (id instanceof WeatherData source) {
+            source.getWeathers().forEach(mongoOperations::remove);
+            mongoOperations.remove(source.getCoordinates());
+            mongoOperations.remove(source.getConditions());
+            mongoOperations.remove(source.getWind());
         }
     }
 }

@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static com.example.weather.client.utility.PodamUtility.makePojo;
@@ -27,6 +29,7 @@ class WeatherDataServiceTest {
     private static final WeatherDataDto WEATHER_DATA_DTO = makePojo(WeatherDataDto.class);
     private static final WeatherData WEATHER_DATA = makePojo(WeatherData.class);
     private static final Page<WeatherData> PAGE_WEATHER_DATA = new PageImpl<>(List.of(WEATHER_DATA));
+    private List<WeatherData> WEATHER_DATA_LIST = List.of(WEATHER_DATA);
     @Mock
     private WeatherDataRepo weatherDataRepo;
     @Mock
@@ -68,5 +71,30 @@ class WeatherDataServiceTest {
         assertThrows(ResourceToLargeException.class,
                 () -> weatherDataService.getWeatherDataByCity("Berlin", 0, 150));
         verify(weatherDataRepo, times(0)).findAllByCityName("Berlin", pageable);
+    }
+
+    @Test
+    void testDeleteWeatherDataInTimePeriod() {
+        var now = LocalDateTime.now();
+        var seconds = now.toEpochSecond(ZoneOffset.UTC);
+        when(weatherDataRepo.findAllByUnixTimeBetween(seconds, seconds))
+                .thenReturn(WEATHER_DATA_LIST);
+        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+        weatherDataService.deleteWeatherDataInTimePeriod(now, now);
+        verify(weatherDataRepo).findAllByUnixTimeBetween(seconds, seconds);
+        verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+    }
+
+    @Test
+    void testDeleteWeatherDataInTimePeriodIfFromTimeNull() {
+        var now = LocalDateTime.now();
+        var fromTime = LocalDateTime.MIN.toEpochSecond(ZoneOffset.UTC);
+        var toTime = now.toEpochSecond(ZoneOffset.UTC);
+        when(weatherDataRepo.findAllByUnixTimeBetween(fromTime, toTime))
+                .thenReturn(WEATHER_DATA_LIST);
+        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+        weatherDataService.deleteWeatherDataInTimePeriod(null, now);
+        verify(weatherDataRepo).findAllByUnixTimeBetween(fromTime, toTime);
+        verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
     }
 }
