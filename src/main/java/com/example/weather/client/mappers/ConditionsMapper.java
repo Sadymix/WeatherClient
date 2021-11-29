@@ -2,26 +2,22 @@ package com.example.weather.client.mappers;
 
 import com.example.weather.client.models.dto.ConditionsDto;
 import com.example.weather.client.models.entity.Conditions;
-import org.springframework.stereotype.Component;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-@Component
-public class ConditionsMapper {
+@Mapper(componentModel = "spring")
+public interface ConditionsMapper {
+    @Mappings({
+            @Mapping(target = "temperature", source = "conditionsDto.temp"),
+            @Mapping(target = "maxTemperature", source = "conditionsDto.tempMax"),
+            @Mapping(target = "minTemperature", source = "conditionsDto.tempMin")
 
-    public Conditions toEntity(ConditionsDto conditionsDto) {
-        return new Conditions()
-                .setTemperature(conditionsDto.getTemp())
-                .setMaxTemperature(conditionsDto.getTempMax())
-                .setMinTemperature(conditionsDto.getTempMin())
-                .setPressure(conditionsDto.getPressure())
-                .setHumidity(conditionsDto.getHumidity());
-    }
+    })
+    Conditions toEntity(ConditionsDto conditionsDto);
 
-    public ConditionsDto toDto(Conditions conditions) {
-        return new ConditionsDto()
-                .setTemp(conditions.getTemperature())
-                .setTempMax(conditions.getMaxTemperature())
-                .setTempMin(conditions.getMinTemperature())
-                .setPressure(conditions.getPressure())
-                .setHumidity(conditions.getHumidity());
-    }
+    @InheritInverseConfiguration(name = "toEntity")
+    ConditionsDto toDto(Conditions conditions);
+
 }
