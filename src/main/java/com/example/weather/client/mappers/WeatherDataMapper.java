@@ -7,8 +7,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", uses = {
         ConditionsMapper.class,
         GeoCoordinatesMapper.class,
@@ -26,6 +24,4 @@ public interface WeatherDataMapper {
 
     @InheritInverseConfiguration(name = "toEntity")
     WeatherDataDto toDto(WeatherData weatherData);
-
-    List<WeatherDataDto> mapToDtoList(List<WeatherData> weatherDataPage);
 }
