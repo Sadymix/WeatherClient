@@ -2,20 +2,19 @@ package com.example.weather.client.mappers;
 
 import com.example.weather.client.models.dto.GeoCoordinatesDto;
 import com.example.weather.client.models.entity.GeoCoordinates;
-import org.springframework.stereotype.Component;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
-@Component
-public class GeoCoordinatesMapper {
+@Mapper(componentModel = "spring")
+public interface GeoCoordinatesMapper {
+     @Mappings({
+             @Mapping(target = "longitude", source = "lon"),
+             @Mapping(target = "latitude", source = "lat")
+     })
+     GeoCoordinates toEntity(GeoCoordinatesDto geoCoordinatesDto);
 
-    public GeoCoordinates toEntity(GeoCoordinatesDto geoCoordinatesDto) {
-        return new GeoCoordinates()
-                .setLongitude(geoCoordinatesDto.getLon())
-                .setLatitude(geoCoordinatesDto.getLat());
-    }
-
-    public GeoCoordinatesDto toDto(GeoCoordinates geoCoordinates) {
-        return new GeoCoordinatesDto()
-                .setLon(geoCoordinates.getLongitude())
-                .setLat(geoCoordinates.getLatitude());
-    }
+     @InheritInverseConfiguration(name = "toEntity")
+     GeoCoordinatesDto toDto(GeoCoordinates geoCoordinates);
 }

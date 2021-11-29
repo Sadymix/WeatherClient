@@ -92,7 +92,9 @@ class WeatherDataServiceTest {
         var toTime = now.toEpochSecond(ZoneOffset.UTC);
         when(weatherDataRepo.findAllByUnixTimeBetween(fromTime, toTime))
                 .thenReturn(WEATHER_DATA_LIST);
-        doNothing().when(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
+        doNothing()
+                .when(weatherDataRepo)
+                .deleteAll(WEATHER_DATA_LIST);
         weatherDataService.deleteWeatherDataInTimePeriod(null, now);
         verify(weatherDataRepo).findAllByUnixTimeBetween(fromTime, toTime);
         verify(weatherDataRepo).deleteAll(WEATHER_DATA_LIST);
