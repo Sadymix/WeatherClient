@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name:
+    url: jdbc:h2:mem:weather
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+    show-sql: true
+openweather:
+  api:
+    key: ee6bbf09dcc0ab10e314eda8dce3dc74
+app:
+  url:
+    base: http://api.openweathermap.org/data/2.5/weather
+  mongo:
+    name: weatherClient
+    url: mongodb://localhost:27017/
