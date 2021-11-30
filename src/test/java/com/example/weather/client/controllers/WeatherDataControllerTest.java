@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WeatherDataControllerTest {
 
-    private WeatherDataDto weatherDataDto = makePojo(WeatherDataDto.class);
+    private final WeatherDataDto weatherDataDto = makePojo(WeatherDataDto.class);
     private static final String URL = "http://localhost:8080/weather/data";
     @Autowired
     private WebApplicationContext wac;
@@ -59,8 +59,10 @@ class WeatherDataControllerTest {
     @SneakyThrows
     @Test
     void testDeleteWeatherDataInTimePeriod() {
-        var fromTime = LocalDateTime.of(2021, Month.SEPTEMBER, 9, 12, 12, 12);
-        var toTime = LocalDateTime.of(2021, Month.NOVEMBER, 23, 15, 26, 52);
+        var fromTime =
+                LocalDateTime.of(2021, Month.SEPTEMBER, 9, 12, 12, 12);
+        var toTime =
+                LocalDateTime.of(2021, Month.NOVEMBER, 23, 15, 26, 52);
         doNothing().when(weatherDataService)
                 .deleteWeatherDataInTimePeriod(fromTime, toTime);
         mockMvc.perform(delete(URL + "?fromTime=2021-09-09T12:12:12&toTime=2021-11-23T15:26:52"))
