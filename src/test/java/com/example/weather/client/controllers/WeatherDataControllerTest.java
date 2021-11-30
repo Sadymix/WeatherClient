@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class WeatherDataControllerTest {
 
     private WeatherDataDto weatherDataDto = makePojo(WeatherDataDto.class);
-    private String url = "http://localhost:8080/weather/data";
+    private static final String URL = "http://localhost:8080/weather/data";
     @Autowired
     private WebApplicationContext wac;
     @MockBean
@@ -63,14 +63,14 @@ class WeatherDataControllerTest {
         var toTime = LocalDateTime.of(2021, Month.NOVEMBER, 23, 15, 26, 52);
         doNothing().when(weatherDataService)
                 .deleteWeatherDataInTimePeriod(fromTime, toTime);
-        mockMvc.perform(delete(url + "?fromTime=2021-09-09T12:12:12&toTime=2021-11-23T15:26:52"))
+        mockMvc.perform(delete(URL + "?fromTime=2021-09-09T12:12:12&toTime=2021-11-23T15:26:52"))
                 .andExpect(status().isOk());
         verify(weatherDataService).deleteWeatherDataInTimePeriod(fromTime, toTime);
     }
 
     @SneakyThrows
     private void performForGetWeatherDataByCity() {
-        mockMvc.perform(get(url + "?city=Warsaw&page=0&size=10"))
+        mockMvc.perform(get(URL + "?city=Warsaw&page=0&size=10"))
                 .andExpectAll(
                         status().isOk(),
                         jsonPath("$.content[0].coord.lon")
