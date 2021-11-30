@@ -28,13 +28,12 @@ class WeatherClientTest {
     @BeforeEach
     void setUp() {
         ReflectionTestUtils.setField(weatherClient, "url", URL);
-        ReflectionTestUtils.setField(weatherClient, "keyValue", "123");
     }
 
     @Test
     void testGetWeather() {
         var weatherDataDto = makePojo(WeatherDataDto.class);
-        when(restTemplate.getForObject(eq(URL + "?q=Warsaw&appid=123"), eq(WeatherDataDto.class)))
+        when(restTemplate.getForObject(eq(URL + "?q=Warsaw"), eq(WeatherDataDto.class)))
                 .thenReturn(weatherDataDto);
         var weatherDto = weatherClient.getWeather("Warsaw");
         assertThat(weatherDto).isNotNull();
