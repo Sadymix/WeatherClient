@@ -14,9 +14,10 @@ public class HttpRequestWrapperImpl extends HttpRequestWrapper {
         super(request);
         this.keyValue = keyValue;
     }
+
     @SneakyThrows
     @Override
     public URI getURI() {
-        return new URI(super.getURI()+"&appid=" + keyValue);
+        return new URI(super.getURI() + "&appid=" + keyValue);
     }
 }
