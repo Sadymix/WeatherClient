@@ -25,7 +25,6 @@ class WeatherClientTest {
     @InjectMocks
     private WeatherClient weatherClient;
 
-
     @BeforeEach
     void setUp() {
         ReflectionTestUtils.setField(weatherClient, "url", URL);
