@@ -15,9 +15,11 @@ public class WeatherClient {
     private final RestTemplate restTemplate;
     @Value("${app.url.base}")
     private String url;
+    @Value("${openweather.api.key}")
+    private String keyValue;
 
     public WeatherDataDto getWeather(String city) {
-        return restTemplate.getForObject(url + "?q=" + city,
+        return restTemplate.getForObject(url + "?q=" + city + "&appid=" + keyValue,
                 WeatherDataDto.class);
     }
 }

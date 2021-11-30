@@ -1,6 +1,5 @@
 package com.example.weather.client.configuration;
 
-import com.example.weather.client.interceptor.AppendKeyToUrlInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +18,9 @@ import org.springframework.web.client.RestTemplate;
 public class BeanConfiguration {
 
     @Bean
-    public RestTemplate restTemplate(ObjectMapper objectMapper, AppendKeyToUrlInterceptor appendKeyToUrlInterceptor) {
+    public RestTemplate restTemplate(ObjectMapper objectMapper) {
+
         return new RestTemplateBuilder()
-                .additionalInterceptors(appendKeyToUrlInterceptor)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .messageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
